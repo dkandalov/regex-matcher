@@ -10,9 +10,9 @@ class RegexMatcherTests {
         "a".matchesRegex(".") shouldEqual true
         ".".matchesRegex("a") shouldEqual false
 
-//        "a".matchesRegex("a?") shouldEqual true
-//        "".matchesRegex("a?") shouldEqual true
-//        "b".matchesRegex("a?") shouldEqual false
+        "a".matchesRegex("a?") shouldEqual true
+        "".matchesRegex("a?") shouldEqual true
+        "b".matchesRegex("a?") shouldEqual false
     }
 }
 
@@ -30,12 +30,19 @@ object AnyCharMatcher : RegexMatcher {
         else emptySet()
 }
 
+class OptionalMatcher(private val matcher: RegexMatcher) : RegexMatcher {
+    override fun invoke(input: String) =
+        setOf(input) + matcher(input)
+}
+
+
 private fun String.matchesRegex(regex: String): Boolean {
     return regex
-        .map {
+        .fold(emptyList<RegexMatcher>()) { matchers, it ->
             when (it) {
-                '.'  -> AnyCharMatcher
-                else -> CharMatcher(it)
+                '.'  -> matchers + AnyCharMatcher
+                '?'  -> matchers.dropLast(1) + OptionalMatcher(matchers.last())
+                else -> matchers + CharMatcher(it)
             }
         }
         .fold(setOf(this)) { inputs, nextMatcher ->
