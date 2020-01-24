@@ -9,5 +9,5 @@ class RegexMatcherTests {
 }
 
 private fun String.matchesRegex(regex: String): Boolean {
-    return true
+    return this == regex
 }
