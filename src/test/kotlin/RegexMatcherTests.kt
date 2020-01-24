@@ -24,6 +24,12 @@ class CharMatcher(private val char: Char) : RegexMatcher {
         else emptySet()
 }
 
+object AnyCharMatcher : RegexMatcher {
+    override fun invoke(input: String) =
+        if (input.isNotEmpty()) setOf(input.drop(1))
+        else emptySet()
+}
+
 private fun String.matchesRegex(regex: String): Boolean {
     if (this.length != regex.length) return false
     return zip(regex)
