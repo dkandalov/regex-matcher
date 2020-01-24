@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 class RegexMatcherTests {
     @Test fun `some examples`() {
         "".matchesRegex("") shouldEqual true
+        "a".matchesRegex("a") shouldEqual true
     }
 }
 
