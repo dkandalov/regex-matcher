@@ -14,6 +14,10 @@ class RegexMatcherTests {
         "".matchesRegex("a?") shouldEqual true
         "b".matchesRegex("a?") shouldEqual false
         "b".matchesRegex(".?") shouldEqual true
+
+        "".matchesRegex(".*") shouldEqual true
+        "abc".matchesRegex(".*") shouldEqual true
+        "abc".matchesRegex(".*x") shouldEqual false
     }
 }
 
@@ -36,6 +40,11 @@ class OptionalMatcher(private val matcher: RegexMatcher) : RegexMatcher {
         setOf(input) + matcher(input)
 }
 
+class ZeroOrMoreMatcher(private val matcher: RegexMatcher) : RegexMatcher {
+    override fun invoke(input: String) =
+        setOf(input) + matcher(input).flatMap(this)
+}
+
 
 private fun String.matchesRegex(regex: String): Boolean {
     return regex
@@ -43,6 +52,7 @@ private fun String.matchesRegex(regex: String): Boolean {
             when (it) {
                 '.'  -> matchers + AnyCharMatcher
                 '?'  -> matchers.dropLast(1) + OptionalMatcher(matchers.last())
+                '*'  -> matchers.dropLast(1) + ZeroOrMoreMatcher(matchers.last())
                 else -> matchers + CharMatcher(it)
             }
         }
