@@ -31,7 +31,12 @@ object AnyCharMatcher : RegexMatcher {
 }
 
 private fun String.matchesRegex(regex: String): Boolean {
-    if (this.length != regex.length) return false
-    return zip(regex)
-        .all { it.second == '.' || it.first == it.second }
+    return regex.map {
+        when (it) {
+            '.' -> AnyCharMatcher
+            else -> CharMatcher(it)
+        }
+    }.fold(setOf(this)) { inputs, nextMatcher ->
+        inputs.flatMap(nextMatcher).toSet()
+    }.any { it == "" }
 }
