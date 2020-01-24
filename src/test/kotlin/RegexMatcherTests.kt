@@ -31,12 +31,15 @@ object AnyCharMatcher : RegexMatcher {
 }
 
 private fun String.matchesRegex(regex: String): Boolean {
-    return regex.map {
-        when (it) {
-            '.' -> AnyCharMatcher
-            else -> CharMatcher(it)
+    return regex
+        .map {
+            when (it) {
+                '.'  -> AnyCharMatcher
+                else -> CharMatcher(it)
+            }
         }
-    }.fold(setOf(this)) { inputs, nextMatcher ->
-        inputs.flatMap(nextMatcher).toSet()
-    }.any { it == "" }
+        .fold(setOf(this)) { inputs, nextMatcher ->
+            inputs.flatMap(nextMatcher).toSet()
+        }
+        .any { input -> input == "" }
 }
