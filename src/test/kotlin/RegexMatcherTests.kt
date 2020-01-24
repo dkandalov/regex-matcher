@@ -18,6 +18,6 @@ class RegexMatcherTests {
 
 private fun String.matchesRegex(regex: String): Boolean {
     if (this.length != regex.length) return false
-    return this.zip(regex)
+    return zip(regex)
         .all { it.second == '.' || it.first == it.second }
 }
