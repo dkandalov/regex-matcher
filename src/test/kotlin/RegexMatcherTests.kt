@@ -13,6 +13,7 @@ class RegexMatcherTests {
         "a".matchesRegex("a?") shouldEqual true
         "".matchesRegex("a?") shouldEqual true
         "b".matchesRegex("a?") shouldEqual false
+        "b".matchesRegex(".?") shouldEqual true
     }
 }
 
