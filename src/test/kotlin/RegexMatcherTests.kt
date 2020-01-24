@@ -9,6 +9,10 @@ class RegexMatcherTests {
 
         "a".matchesRegex(".") shouldEqual true
         ".".matchesRegex("a") shouldEqual false
+
+//        "a".matchesRegex("a?") shouldEqual true
+//        "".matchesRegex("a?") shouldEqual true
+//        "b".matchesRegex("a?") shouldEqual false
     }
 }
 
