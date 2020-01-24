@@ -18,6 +18,10 @@ class RegexMatcherTests {
         "".matchesRegex(".*") shouldEqual true
         "abc".matchesRegex(".*") shouldEqual true
         "abc".matchesRegex(".*x") shouldEqual false
+
+        "".matchesRegex(".+") shouldEqual false
+        "abc".matchesRegex(".+") shouldEqual true
+        "abc".matchesRegex(".+x") shouldEqual false
     }
 }
 
@@ -52,6 +56,7 @@ private fun String.matchesRegex(regex: String): Boolean {
             when (it) {
                 '.'  -> matchers + AnyCharMatcher
                 '?'  -> matchers.dropLast(1) + OptionalMatcher(matchers.last())
+                '+'  -> matchers + ZeroOrMoreMatcher(matchers.last())
                 '*'  -> matchers.dropLast(1) + ZeroOrMoreMatcher(matchers.last())
                 else -> matchers + CharMatcher(it)
             }
