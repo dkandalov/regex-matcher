@@ -16,6 +16,14 @@ class RegexMatcherTests {
     }
 }
 
+interface RegexMatcher : (String) -> Set<String>
+
+class CharMatcher(private val char: Char) : RegexMatcher {
+    override fun invoke(input: String) =
+        if (input.startsWith(char)) setOf(input.drop(1))
+        else emptySet()
+}
+
 private fun String.matchesRegex(regex: String): Boolean {
     if (this.length != regex.length) return false
     return zip(regex)
